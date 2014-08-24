@@ -185,6 +185,10 @@ main(int argc, char **argv)
     }
   }
 
+  //pipe stdout to log file
+  // freopen("/data/data/com.metasploit.root/rootlog", "a", stdout);
+  printf("************* attempting to root *************\n");
+
   device_detected();
 
   if (!setup_variables()) {
@@ -199,9 +203,18 @@ main(int argc, char **argv)
     exit(EXIT_FAILURE);
   }
 
+  printf("got root!\n");
+
+
   if (command == NULL) {
+    printf("running default command: \"/system/bin/sh\"\n");
     system("/system/bin/sh");
   } else {
+    printf("running command: %s\n", command);
+    
+    //execl replaces process, flush stdout before.
+    fflush(stdout);
+
     execl("/system/bin/sh", "/system/bin/sh", "-c", command, NULL);
   }
 
